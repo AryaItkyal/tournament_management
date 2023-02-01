@@ -9,6 +9,7 @@ public class NormalAuthenticator extends AbstractAuthenticator {
     @Override
     public void authenticate(String username, String password) throws AuthenticationException {
         try {
+
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery("SELECT username, password FROM user WHERE username = '" + username + "'");
 

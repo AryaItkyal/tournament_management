@@ -26,7 +26,6 @@ public class MainFrame extends javax.swing.JFrame {
     int count = 0;
     private int teamId;
     private int updateId;
-    Connection connection;
     Statement statement = null;
     private ResultSet resultSet = null;
     private String DATABASE_URL = "jdbc:mysql://localhost:3306/ipl";
@@ -160,7 +159,6 @@ public class MainFrame extends javax.swing.JFrame {
      */
     public MainFrame() {
         initComponents();
-        connection = startConnection();
 
     }
 
@@ -1491,7 +1489,7 @@ public class MainFrame extends javax.swing.JFrame {
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {
         try {
             // TODO add your handling code here:
-
+            Connection connection = DatabaseConnection.startConnection();
             statement = connection.createStatement();
             setResultSet(statement.executeQuery("SELECT Team_Name,Played,Win,Draw,Loss,Point FROM league_standing ORDER BY Point DESC"));
             jTable1.setModel(DbUtils.resultSetToTableModel(getResultSet()));
@@ -1522,6 +1520,7 @@ public class MainFrame extends javax.swing.JFrame {
     private void signInButtonActionPerformed(java.awt.event.ActionEvent evt) {
 
         try {
+            Connection connection = DatabaseConnection.startConnection();
             statement = connection.createStatement();
         } catch (SQLException ex) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
@@ -1534,9 +1533,9 @@ public class MainFrame extends javax.swing.JFrame {
             AbstractAuthenticator authenticator;
 
             if (username.isEmpty() || password.isEmpty()) {
-                authenticator = new EmptyAuthenticator(connection);
+                authenticator = new EmptyAuthenticator(DatabaseConnection.connection);
             } else {
-                authenticator = new NormalAuthenticator(connection);
+                authenticator = new NormalAuthenticator(DatabaseConnection.connection);
             }
 
             authenticator.authenticate(username, password);
@@ -1566,6 +1565,7 @@ public class MainFrame extends javax.swing.JFrame {
     private void teamButtonActionPerformed(java.awt.event.ActionEvent evt) {
         try {
             // TODO add your handling code here:
+            Connection connection = DatabaseConnection.startConnection();
             statement = connection.createStatement();
             setResultSet(statement.executeQuery("SELECT * FROM team WHERE Value > 0"));
             ResultSetMetaData resultSetMetaData = getResultSet().getMetaData();
@@ -1582,6 +1582,7 @@ public class MainFrame extends javax.swing.JFrame {
     private void playerButtonActionPerformed(java.awt.event.ActionEvent evt) {
         try {
             // TODO add your handling code here: CardLayout card = (CardLayout) jPanel1.getLayout();
+            Connection connection = DatabaseConnection.startConnection();
             statement = connection.createStatement();
             setResultSet(statement.executeQuery("SELECT Player_ID,First_name,Last_Name,Team_Name,Country_Name FROM player_info Natural join team WHERE team.`Team_ID`=player_info.`Team_ID`"));
 
@@ -1614,6 +1615,7 @@ public class MainFrame extends javax.swing.JFrame {
         valueTextField.setText(null);
         try {
 
+            Connection connection = DatabaseConnection.startConnection();
             statement = connection.createStatement();
             setResultSet(statement.executeQuery("SELECT * FROM team"));
             teamManagementTable.setModel(DbUtils.resultSetToTableModel(getResultSet()));
@@ -1647,7 +1649,8 @@ public class MainFrame extends javax.swing.JFrame {
 
 
             try {
-                statement = connection.createStatement();
+                Connection connection = DatabaseConnection.startConnection();
+            statement = connection.createStatement();
             } catch (SQLException ex) {
                 Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -1721,6 +1724,7 @@ public class MainFrame extends javax.swing.JFrame {
 
 
         try {
+            Connection connection = DatabaseConnection.startConnection();
             statement = connection.createStatement();
             statement.executeUpdate(deletedString);
 
@@ -1751,6 +1755,7 @@ public class MainFrame extends javax.swing.JFrame {
         jTextField4.setText(firstName);
         jTextField5.setText(lastName);
         try {
+            Connection connection = DatabaseConnection.startConnection();
             statement = connection.createStatement();
             getResultSet().next();
 
@@ -1786,6 +1791,7 @@ public class MainFrame extends javax.swing.JFrame {
 
 
         try {
+            Connection connection = DatabaseConnection.startConnection();
             statement = connection.createStatement();
         } catch (SQLException ex) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
@@ -1841,6 +1847,7 @@ public class MainFrame extends javax.swing.JFrame {
             return;
         }
         try {
+            Connection connection = DatabaseConnection.startConnection();
             statement = connection.createStatement();
             setResultSet(statement.executeQuery("SELECT Team_ID FROM team WHERE Team_Name =" + "'" + teamName + "'"));
             getResultSet().next();
@@ -1852,6 +1859,7 @@ public class MainFrame extends javax.swing.JFrame {
         value = Integer.parseInt(jTextField8.getText());
         System.out.println("Foundation:" + foundationYear + " value: " + value + "teamId: " + getTeamId());
         try {
+            Connection connection = DatabaseConnection.startConnection();
             statement = connection.createStatement();
             statement.executeUpdate("UPDATE team SET Team_Name = " + "'" + teamName + "', Year_Founded = " + foundationYear + ", Value=" +
                     value + " WHERE Team_ID =" + getTeamId());
@@ -1873,7 +1881,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void ExitButtonActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
-        closeConnection();
+        DatabaseConnection.closeConnection();
         System.exit(0);
     }
 
@@ -1895,6 +1903,7 @@ public class MainFrame extends javax.swing.JFrame {
         }
 
         try {
+            Connection connection = DatabaseConnection.startConnection();
             statement = connection.createStatement();
             setResultSet(statement.executeQuery("SELECT * FROM team WHERE Team_Name=" + "'" + teamComboBox.getSelectedItem().toString() + "' "));
             teamManagementTable.setModel(DbUtils.resultSetToTableModel(getResultSet()));
@@ -1919,6 +1928,7 @@ public class MainFrame extends javax.swing.JFrame {
                 + " AND player_info.`Team_ID`=(SELECT Team_ID FROM player_info WHERE First_Name =" + "'" + playerComboBox.getSelectedItem().toString() + "'" + ")"
                 + " AND player_info.`Team_ID`=team.`Team_ID` AND First_Name=" + "'" + playerComboBox.getSelectedItem().toString() + "' ";
         try {
+            Connection connection = DatabaseConnection.startConnection();
             statement = connection.createStatement();
             setResultSet(statement.executeQuery(sql));
             playerTable.setModel(DbUtils.resultSetToTableModel(getResultSet()));
@@ -1941,6 +1951,7 @@ public class MainFrame extends javax.swing.JFrame {
             int pointHome, pointAway;
             int resultHome, resultAway;
             String matchResult;
+            Connection connection = DatabaseConnection.startConnection();
             statement = connection.createStatement();
 
             //HOME
@@ -2024,6 +2035,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         try {
 
+            Connection connection = DatabaseConnection.startConnection();
             statement = connection.createStatement();
             setResultSet(statement.executeQuery("SELECT * FROM player_info"));
             playerTable.setModel(DbUtils.resultSetToTableModel(getResultSet()));
@@ -2055,6 +2067,7 @@ public class MainFrame extends javax.swing.JFrame {
         System.out.println("updateQueryInfo:" + updateQueryInfo);
 
         try {
+            Connection connection = DatabaseConnection.startConnection();
             statement = connection.createStatement();
             statement.executeUpdate(updateQueryInfo);
             JOptionPane.showMessageDialog(this, "Player has been updated successfully");
@@ -2071,6 +2084,7 @@ public class MainFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         try {
 
+            Connection connection = DatabaseConnection.startConnection();
             statement = connection.createStatement();
             setResultSet(statement.executeQuery("SELECT * FROM player_info"));
             playerTable.setModel(DbUtils.resultSetToTableModel(getResultSet()));
@@ -2099,6 +2113,7 @@ public class MainFrame extends javax.swing.JFrame {
         team = (String) jComboBox3.getSelectedItem();
 
         try {
+            Connection connection = DatabaseConnection.startConnection();
             statement = connection.createStatement();
         } catch (SQLException ex) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
@@ -2157,32 +2172,32 @@ public class MainFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }
 
-    public Connection startConnection() {
-        try {
-            //        String DATABASE_URL = "jdbc:mysql://localhost:3306/mynewdatabase";
-            Object newInstance = Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        try {
-            connection = DriverManager.getConnection(getDATABASE_URL(), getUserName(), getPassword());
-
-            System.out.println("connected");
-        } catch (SQLException ex) {
-            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(null, ex);
-        }
-        return connection;
-    }
-
-
-    public void closeConnection() {
-        try {
-            connection.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+//    public Connection startConnection() {
+//        try {
+//            //        String DATABASE_URL = "jdbc:mysql://localhost:3306/mynewdatabase";
+//            Object newInstance = Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
+//        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+//            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        try {
+//            connection = DriverManager.startConnection(getDATABASE_URL(), getUserName(), getPassword());
+//
+//            System.out.println("connected");
+//        } catch (SQLException ex) {
+//            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
+//            JOptionPane.showMessageDialog(null, ex);
+//        }
+//        return connection;
+//    }
+//
+//
+//    public void closeConnection() {
+//        try {
+//            connection.close();
+//        } catch (SQLException ex) {
+//            Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//    }
 
     public void comboFilter(String enteredText) {
         ArrayList<String> filterArray = new ArrayList<String>();
@@ -2194,7 +2209,7 @@ public class MainFrame extends javax.swing.JFrame {
 
             String str = "SELECT First_Name FROM player_info WHERE First_Name  LIKE '" + enteredText + "%'";
 
-
+            Connection connection = DatabaseConnection.startConnection();
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(str);
             while (rs.next()) {
@@ -2251,6 +2266,7 @@ public class MainFrame extends javax.swing.JFrame {
     private void createArrayListDB() {
         try {
             String sql = "select First_Name from player_info";
+            Connection connection = DatabaseConnection.startConnection();
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
@@ -2269,6 +2285,7 @@ public class MainFrame extends javax.swing.JFrame {
     public void createArrayListDB2() {
         try {
             String sql = "SELECT Team_Name FROM team";
+            Connection connection = DatabaseConnection.startConnection();
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
