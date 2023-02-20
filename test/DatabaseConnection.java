@@ -12,12 +12,6 @@ public class DatabaseConnection {
     private static String password = "1234";
     static String DATABASE_URL = "jdbc:mysql://localhost:3306/ipl";
 
-
-    // public DatabaseConnection(String DATABASE_URL){
-      //  this.DATABASE_URL = DATABASE_URL;
-  //  }
-
-
     public static Connection startConnection(){
            try {
             Class.forName("com.mysql.cj.jdbc.Driver") ;
