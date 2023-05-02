@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 
 public class DatabaseConnection {
     Connection connection = null;
-    private String userName = "root";
+    private String  userName = "root";
     private String password = "1234";
     String DATABASE_URL = "jdbc:mysql://localhost:3306/ipl";
    // public DatabaseConnection(String DATABASE_URL){

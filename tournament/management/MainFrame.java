@@ -175,13 +175,8 @@ public class MainFrame extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | UnsupportedLookAndFeelException | IllegalAccessException |
+                 InstantiationException ex) {
             java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
@@ -1525,21 +1520,25 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     private void signInButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
 
         try {
-
             statement = connection.createStatement();
         } catch (SQLException ex) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-
         try {
             String username = userNameTextField.getText();
             String password = new String(jPasswordField1.getPassword());
 
-            Authenticator authenticator = new Authenticator(connection);
+            AbstractAuthenticator authenticator;
+
+            if (username.isEmpty() || password.isEmpty()) {
+                authenticator = new EmptyAuthenticator(connection);
+            } else {
+                authenticator = new NormalAuthenticator(connection);
+            }
+
             authenticator.authenticate(username, password);
 
             // Authentication successful
@@ -1550,17 +1549,14 @@ public class MainFrame extends javax.swing.JFrame {
 
             createArrayListDB();
             createArrayListDB2();
-
             searchPlayer();
             searchCompany();
 
         } catch (AuthenticationException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
         }
-
-
-
     }
+
 
 
 
