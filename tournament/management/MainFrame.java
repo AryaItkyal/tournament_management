@@ -9,6 +9,7 @@ import com.jtattoo.plaf.hifi.HiFiLookAndFeel;
 import net.proteanit.sql.DbUtils;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -19,7 +20,6 @@ import java.util.logging.Logger;
 public class MainFrame extends javax.swing.JFrame {
 
 
-    // DatabaseConnection databaseConnection;
 
     private final String userName = "root";
     private final String password = "1234";
@@ -1486,6 +1486,9 @@ public class MainFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>
 
+    private void jComboBox2ActionPerformed(ActionEvent evt) {
+    }
+
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {
         try {
             // TODO add your handling code here:
@@ -1500,6 +1503,7 @@ public class MainFrame extends javax.swing.JFrame {
         CardLayout card = (CardLayout) jPanel1.getLayout();
 
         card.show(jPanel1, "card14");
+        DatabaseConnection.closeConnection();
 
     }
 
@@ -1554,6 +1558,7 @@ public class MainFrame extends javax.swing.JFrame {
         } catch (AuthenticationException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
         }
+        DatabaseConnection.closeConnection();
     }
 
 
@@ -1577,6 +1582,8 @@ public class MainFrame extends javax.swing.JFrame {
 
         CardLayout card = (CardLayout) jPanel1.getLayout();
         card.show(jPanel1, "teamManageCard");
+        DatabaseConnection.closeConnection();
+
     }
 
     private void playerButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -1592,6 +1599,8 @@ public class MainFrame extends javax.swing.JFrame {
         playerTable.setModel(DbUtils.resultSetToTableModel(getResultSet()));
         CardLayout card = (CardLayout) jPanel1.getLayout();
         card.show(jPanel1, "playerManageCard");
+        DatabaseConnection.closeConnection();
+
     }
 
     private void addPlayerButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -1624,6 +1633,8 @@ public class MainFrame extends javax.swing.JFrame {
         }
         CardLayout card = (CardLayout) jPanel1.getLayout();
         card.show(jPanel1, "teamManageCard");
+        DatabaseConnection.closeConnection();
+
     }
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {
@@ -1665,6 +1676,7 @@ public class MainFrame extends javax.swing.JFrame {
             yearFoundedTextField.setText(null);
             valueTextField.setText(null);
         }
+        DatabaseConnection.closeConnection();
 
     }
 
@@ -1735,6 +1747,7 @@ public class MainFrame extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
+        DatabaseConnection.closeConnection();
     }
 
     private void updatePlayerButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -1764,7 +1777,7 @@ public class MainFrame extends javax.swing.JFrame {
         }
         CardLayout card = (CardLayout) jPanel1.getLayout();
         card.show(jPanel1, "card_updateplayer");
-
+        DatabaseConnection.closeConnection();
 
     }
 
@@ -1817,6 +1830,7 @@ public class MainFrame extends javax.swing.JFrame {
         CardLayout card = (CardLayout) jPanel1.getLayout();
 
         card.show(jPanel1, "playerProfile");
+        DatabaseConnection.closeConnection();
 
     }
 
@@ -1855,6 +1869,7 @@ public class MainFrame extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
+        DatabaseConnection.closeConnection();
         foundationYear = Integer.parseInt(jTextField7.getText());
         value = Integer.parseInt(jTextField8.getText());
         System.out.println("Foundation:" + foundationYear + " value: " + value + "teamId: " + getTeamId());
@@ -1870,6 +1885,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         CardLayout card = (CardLayout) jPanel1.getLayout();
         card.show(jPanel1, "teamManageCard");
+        DatabaseConnection.closeConnection();
     }
 
     private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {
@@ -1881,7 +1897,6 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void ExitButtonActionPerformed(java.awt.event.ActionEvent evt) {
         // TODO add your handling code here:
-        DatabaseConnection.closeConnection();
         System.exit(0);
     }
 
@@ -1908,9 +1923,11 @@ public class MainFrame extends javax.swing.JFrame {
             setResultSet(statement.executeQuery("SELECT * FROM team WHERE Team_Name=" + "'" + teamComboBox.getSelectedItem().toString() + "' "));
             teamManagementTable.setModel(DbUtils.resultSetToTableModel(getResultSet()));
 
+
         } catch (SQLException ex) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
+        DatabaseConnection.closeConnection();
 
     }
 
@@ -1936,6 +1953,7 @@ public class MainFrame extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
+        DatabaseConnection.closeConnection();
 
     }
 
@@ -2021,6 +2039,7 @@ public class MainFrame extends javax.swing.JFrame {
         jComboBox7.setSelectedItem("");
 
         JOptionPane.showMessageDialog(this, "Match Result has been updated");
+        DatabaseConnection.closeConnection();
     }
 
     private void jButton21ActionPerformed(java.awt.event.ActionEvent evt) {
@@ -2045,6 +2064,7 @@ public class MainFrame extends javax.swing.JFrame {
         CardLayout card = (CardLayout) jPanel1.getLayout();
 
         card.show(jPanel1, "playerManageCard");
+        DatabaseConnection.closeConnection();
     }
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {
@@ -2078,6 +2098,8 @@ public class MainFrame extends javax.swing.JFrame {
         CardLayout card = (CardLayout) jPanel1.getLayout();
 
         card.show(jPanel1, "playerManageCard");
+        DatabaseConnection.closeConnection();
+
     }
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {
@@ -2095,7 +2117,7 @@ public class MainFrame extends javax.swing.JFrame {
         CardLayout card = (CardLayout) jPanel1.getLayout();
 
         card.show(jPanel1, "playerManageCard");
-
+        DatabaseConnection.closeConnection();
     }
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {
@@ -2164,13 +2186,11 @@ public class MainFrame extends javax.swing.JFrame {
         jTextField1.setText(null);
         jTextField2.setText(null);
         jTextField3.setText(null);
+        DatabaseConnection.closeConnection();
 
     }
     // End of variables declaration
 
-    private void jComboBox2ActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
-    }
 
 //    public Connection startConnection() {
 //        try {
@@ -2223,7 +2243,7 @@ public class MainFrame extends javax.swing.JFrame {
         } catch (Exception ex) {
             System.out.println("error" + ex);
         }
-
+        DatabaseConnection.closeConnection();
 
     }
 
@@ -2278,6 +2298,8 @@ public class MainFrame extends javax.swing.JFrame {
         } catch (SQLException ex) {
 
         }
+        DatabaseConnection.closeConnection();
+
 
 
     }
@@ -2296,6 +2318,7 @@ public class MainFrame extends javax.swing.JFrame {
         } catch (SQLException ex) {
 
         }
+        DatabaseConnection.closeConnection();
 
     }
 
