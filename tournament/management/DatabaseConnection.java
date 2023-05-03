@@ -14,24 +14,25 @@ import java.util.logging.Logger;
 
 
 public class DatabaseConnection {
-    Connection connection = null;
-    private String  userName = "root";
-    private String password = "1234";
-    String DATABASE_URL = "jdbc:mysql://localhost:3306/ipl";
-   // public DatabaseConnection(String DATABASE_URL){
-      //  this.DATABASE_URL = DATABASE_URL; 
+    static Connection connection = null;
+    private static String  userName = "root";
+    private static String password = "1234";
+    static String DATABASE_URL = "jdbc:mysql://localhost:3306/ipl";
+
+
+    // public DatabaseConnection(String DATABASE_URL){
+      //  this.DATABASE_URL = DATABASE_URL;
   //  }
-    
-   
-    public Connection startConnection(){
+
+
+    public static Connection startConnection(){
            try {
-            Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException ex) {
+            Class.forName("com.mysql.cj.jdbc.Driver") ;
+        } catch (ClassNotFoundException ex) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
             connection =  DriverManager.getConnection(DATABASE_URL,userName,password);
-            
             System.out.println("connected");
         } catch (SQLException ex) {
             Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
@@ -39,12 +40,12 @@ public class DatabaseConnection {
         }
         return  connection;
     }
-    public void closeConnection(){
+    public static void closeConnection(){
         try {
             connection.close();
         } catch (SQLException ex) {
             Logger.getLogger(DatabaseConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
 }
